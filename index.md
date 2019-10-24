@@ -258,10 +258,3 @@ Now you have the pbcopy listener running, no need to use a _screen_ session.
 
 ### netcat VS SSH
 You should however be aware of something... by using the netcat method, any user on the same server you are, could connect to port 55555 and inject stuff on your local pasteboard; if you live well with this possibility, use netcat, if not, use my first approach, exploiting SSH _RemoteForward._
-
-<!--## Forward Agent
-holding your keys to reuse-->
-
-<!--## Keep Alive
-..so your conection is not dropped!-->
-{% include comments.html %}
