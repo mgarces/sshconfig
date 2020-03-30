@@ -31,13 +31,28 @@ To obtain this, first create a folder inside your *~/.ssh*, lets call it **_conf
 Now here is the fun part! Add the next aliases to your _.bashrc_ (or _.zshrc_, if you are with the cool kids):
 
 ```
-alias sshconfig="vim ~/.ssh/configs"
-
-alias sshcompile="echo -n >! ~/.ssh/config && cat
-~/.ssh/configs/*.config >> ~/.ssh/config && cat ~/.ssh/configs/default
->> ~/.ssh/config"
-
+# shortcut to edit all configs in vim
+alias sshconfig="vim ~/.ssh/configs && sshcompile"
+# shortcut to generate EdDSA key - https://tools.ietf.org/html/rfc8032
+alias ssh-keygen-EdDSA="ssh-keygen -o -a 100 -t ed25519"
+# show public key from a private
+alias ssh-show-public-key="ssh-keygen -y -f $1"
+# "compile" SSHConfig everytime you SSH; can be disabled, but it's usually super fast
 alias ssh="sshcompile && ssh"
+
+# SSHConfig function support, to have separate config files
+sshcompile() {
+  echo -n >! ~/.ssh/config
+  for i in $(ls ~/.ssh/configs/*.config)
+  do
+    echo -e "\n" >> ~/.ssh/config
+    cat $i >> ~/.ssh/config
+  done 
+  echo -e "\n" >> ~/.ssh/config
+  cat ~/.ssh/configs/default >> ~/.ssh/config
+}
+
+
 ```
 
 The last line is optional, you can comment it if you want to "compile" _SSHConfig_ manually; leave it like this, if you want to "compile" SSHConfig each time you connect to a host (recommended). _sshcompile_ cleans the ~/.ssh/config, concatenates all the _.config_ files inside the directory, and lastly, concatenates the _default_ file to the end of the config; this way, you get your _SSHConfig_ file all organized.
